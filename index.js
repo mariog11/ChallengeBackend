@@ -30,26 +30,18 @@ var db_pw = null;
 var db_name = null;
 
 fs.readFile('creds.json', (err, data) => {
-  if(err){
-    db_host = process.env.DB_HOST;
-    db_user = process.env.DB_USER;
-    db_pw = process.env.DB_PW;
-    db_name = process.env.DB_NAME;
-  } else{
     data = JSON.parse(data);
     db_host = data.host;
     db_user = data.user;
     db_pw = data.pw;
     db_name = data.db;
-    console.log(db_host, db_user, db_pw, db_name);
-  }
 });
 
 var DBPool = mysql.createPool({
-  host: db_host,
-  user: db_user,
-  password: db_pw,
-  database: db_name
+  host: db_host || process.env.DB_HOST,
+  user: db_user || process.env.DB_USER,
+  password: db_pw || process.env.DB_PW,
+  database: db_name || process.env.DB_NAME
 });
 
 app.get("/firstName", (req, res) => {
