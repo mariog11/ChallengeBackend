@@ -24,24 +24,24 @@ app.listen(PORT, () => console.log("Server is a\'listenin\'"));
 
 app.get("/", (req, res) => { res.send("<h1 style='text-align: center'>TEST DIS Thing</h1>"); });
 
-var db_host = null;
-var db_user = null;
-var db_pw = null;
-var db_name = null;
+// var db_host = null;
+// var db_user = null;
+// var db_pw = null;
+// var db_name = null;
 
-fs.readFile('creds.json', (err, data) => {
-    data = JSON.parse(data);
-    db_host = data.host;
-    db_user = data.user;
-    db_pw = data.pw;
-    db_name = data.db;
-});
+// fs.readFile('creds.json', (err, data) => {
+//     data = JSON.parse(data);
+//     db_host = data.host;
+//     db_user = data.user;
+//     db_pw = data.pw;
+//     db_name = data.db;
+// });
 
 var DBPool = mysql.createPool({
-  host: db_host || process.env.DB_HOST,
-  user: db_user || process.env.DB_USER,
-  password: db_pw || process.env.DB_PW,
-  database: db_name || process.env.DB_NAME
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PW,
+  database: process.env.DB_NAME
 });
 
 app.get("/firstName", (req, res) => {
