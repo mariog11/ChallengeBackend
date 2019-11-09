@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 var mysql = require('mysql');
-
+var fs = require('fs');
 
 const app = express();
 
@@ -24,11 +24,32 @@ app.listen(PORT, () => console.log("Server is a\'listenin\'"));
 
 app.get("/", (req, res) => { res.send("<h1 style='text-align: center'>TEST DIS Thing</h1>"); });
 
+var db_host = null;
+var db_user = null;
+var db_pw = null;
+var db_name = null;
+
+fs.readFile('creds.json', (err, data) => {
+  if(err){
+    db_host = process.env.DB_HOST;
+    db_user = process.env.DB_USER;
+    db_pw = process.env.DB_PW;
+    db_name = process.env.DB_NAME;
+  } else{
+    data = JSON.parse(data);
+    db_host = data.host;
+    db_user = data.user;
+    db_pw = data.pw;
+    db_name = data.db;
+    console.log(db_host, db_user, db_pw, db_name);
+  }
+});
+
 var DBPool = mysql.createPool({
-  host: "us-cdbr-iron-east-05.cleardb.net",
-  user: "b3ce67afce258f",
-  password: "8cc3a15a",
-  database: "heroku_5e71758d45b2d30"
+  host: db_host,
+  user: db_user,
+  password: db_pw,
+  database: db_name
 });
 
 app.get("/firstName", (req, res) => {
